@@ -40,11 +40,13 @@ public class DebeziumConnectorConfig {
     @Bean
     public io.debezium.config.Configuration studentConnector() {
         return io.debezium.config.Configuration.create()
-                .with("connector.class", "io.debezium.connector.mysql.MySqlConnector").
-                        with("offset.storage", "org.apache.kafka.connect.storage.FileOffsetBackingStore")
-                .with("offset.storage.file.filename", "D:\\data\\cdc\\student-offset.dat")
+
+                .with("connector.class", "io.debezium.connector.mysql.MySqlConnector")
+                .with("offset.storage", "org.apache.kafka.connect.storage.FileOffsetBackingStore")
+                .with("offset.storage.file.filename", "D:\\tempFiles\\DebeziumLearn\\data\\student-offset.dat")
 
                 .with("offset.flush.interval.ms", 60000)
+                //name属性将作为nameSpace
                 .with("name", "student-postgres-connector")
 
                 /**
@@ -56,16 +58,16 @@ public class DebeziumConnectorConfig {
                 .with("database.port", studentDBPort)
                 .with("database.user", studentDBUserName)
                 .with("database.password", studentDBPassword)
-                .with("database.serverTimezone", "CST")
+                .with("database.serverTimezone", "Asia/Shanghai")
                 .with("snapshot.mode", "schema_only")
                 .with("database.history", "io.debezium.relational.history.FileDatabaseHistory")
-                .with("database.history.file.filename", "/data/cdc/history.dat")
+                .with("database.history.file.filename", "D:\\tempFiles\\DebeziumLearn\\data\\history.dat")
                 /**
                  *    .with("database.whitelist", "mysql")
                  *    .with("table.whitelist", "mysql.customers")
                  */
-                .with("database.dbname", studentDBName)
-                //指定监听的表，这里写死监听 指定数据库下的hstudent 和person表
-                .with("table.whitelist", studentDBName + ".hstudent" + "," + studentDBName + ".person").build();
+                .with("database.dbname", studentDBName).build();
+        //指定监听的表，这里写死监听 指定数据库下的hstudent 和person表
+        //  .with("table.whitelist", studentDBName + ".hstudent" + "," + studentDBName + ".person").build();
     }
 }
