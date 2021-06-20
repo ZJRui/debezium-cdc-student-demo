@@ -108,6 +108,7 @@ public class CDCListener {
      */
     private void handleEvent(SourceRecord sourceRecord) {
         Struct sourceRecordValue = (Struct) sourceRecord.value();
+        System.out.println(Thread.currentThread().getName());
 
         try {
             if (sourceRecordValue != null) {
