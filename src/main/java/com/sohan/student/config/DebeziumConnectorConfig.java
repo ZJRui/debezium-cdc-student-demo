@@ -60,8 +60,9 @@ public class DebeziumConnectorConfig {
                 .with("database.user", studentDBUserName)
                 .with("database.password", studentDBPassword)
                 .with("database.serverTimezone", "Asia/Shanghai")
-                 .with("snapshot.mode", "schema_only")
-                //.with("snapshot.mode", "initial")
+                //.with("snapshot.mode", "schema_only")
+                .with("snapshot.mode", "initial")
+                //.with("snapshot.mode", "when_needed")
                 /**
                  * FileDatabaseHistory:A DatabaseHistory implementation that stores the schema history in a local file.
                  * 这个文件是用来存储Schema的，里面并没有表的数据，全部都是create table drop table等语句
@@ -88,7 +89,8 @@ public class DebeziumConnectorConfig {
                  */
                 //.with("database.dbname", studentDBName).build();
                 .with("database.whitelist",studentDBName)//指定数据库
-                .with("table.whitelist",studentDBName+"."+"person")//指定表,table.whitelist 属性在新版版中被舍弃，使用
+               // .with("table.whitelist",studentDBName+"."+"person")//指定表,table.whitelist 属性在新版版中被舍弃，使用
+                .with("table.whitelist","studentdb.person,studentdb.student")//指定表,table.whitelist 属性在新版版中被舍弃，使用
 
                 .build();
              //指定监听的表，这里写死监听 指定数据库下的hstudent 和person表
