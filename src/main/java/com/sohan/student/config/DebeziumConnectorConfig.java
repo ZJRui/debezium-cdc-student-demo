@@ -59,7 +59,13 @@ public class DebeziumConnectorConfig {
                 .with("database.user", studentDBUserName)
                 .with("database.password", studentDBPassword)
                 .with("database.serverTimezone", "Asia/Shanghai")
-                .with("snapshot.mode", "schema_only")
+               // .with("snapshot.mode", "schema_only")
+                .with("snapshot.mode", "initial")
+                /**
+                 * FileDatabaseHistory:A DatabaseHistory implementation that stores the schema history in a local file.
+                 * 这个文件是用来存储Schema的，里面并没有表的数据，全部都是create table drop table等语句
+                 *
+                 */
                 .with("database.history", "io.debezium.relational.history.FileDatabaseHistory")
                 .with("database.history.file.filename", "D:\\tempFiles\\DebeziumLearn\\data\\history.dat")
                 /**

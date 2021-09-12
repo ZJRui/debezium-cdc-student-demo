@@ -137,9 +137,12 @@ public class CDCListener {
                     log.info("Data Changed: {} with Operation: {}", message, operation.name());
                 }
             }
+           // throw new RuntimeException();
         } catch (Exception e) {
-            log.error("",e);
+            log.error("", e) ;
+         //  throw e;
         }
+        
 
     }
 }
