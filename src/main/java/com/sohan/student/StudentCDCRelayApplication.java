@@ -3,6 +3,8 @@ package com.sohan.student;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDateTime;
+
 /**
  * The spring boot application class, that starts the app.
  *
@@ -18,5 +20,7 @@ public class StudentCDCRelayApplication {
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(StudentCDCRelayApplication.class, args);
+		LocalDateTime currentDateTime=LocalDateTime.now();
+		System.out.println(currentDateTime);//2021-09-12T13:08:56.316
 	}
 }

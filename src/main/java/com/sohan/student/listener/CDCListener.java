@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -43,7 +45,7 @@ public class CDCListener {
      * The Debezium engine which needs to be loaded with the configurations, Started and Stopped - for the
      * CDC to work.
      */
-    private final EmbeddedEngine engine;
+    private  EmbeddedEngine engine=null;
 
     /**
      * Handle to the Service layer, which interacts with ElasticSearch.
@@ -63,7 +65,24 @@ public class CDCListener {
         this.engine = EmbeddedEngine
                 .create()
                 .using(studentConnector)
-                .notifying(this::handleEvent).build();
+                .notifying(this::handleEvent)
+                .using((success,message,error)->{
+                    if(error!=null) {
+                        log.error(message, error);
+                    }
+                    if (success) {
+                        //Engine 正常停止
+                    }else{
+                        LocalDateTime dateTime=LocalDateTime.now();
+                        StringBuilder builder=new StringBuilder();
+                        builder.append("Engine 异常停止运行：" + dateTime.toString());
+                        log.error(builder.toString());
+                        //重启Engine
+                        this.executor.execute(engine);
+                    }
+
+                }).
+                build();
 
     }
 
@@ -78,7 +97,22 @@ public class CDCListener {
         this.engine = EmbeddedEngine
                 .create()
                 .using(studentConnector)
-                .notifying(this::handleEvent).build();
+                .notifying(this::handleEvent)
+                .using((success,message,error)->{
+                    if(error!=null) {
+                        log.error(message, error);
+                    }
+                    if (success) {
+                        //Engine 正常停止
+                    }else{
+
+                        LocalDateTime dateTime=LocalDateTime.now();
+                        StringBuilder builder=new StringBuilder();
+                        builder.append("Engine 异常停止运行：" + dateTime.toString());
+                        log.error(builder.toString());
+                    }
+
+                }).build();
 
         this.studentService = studentService;
     }
@@ -88,7 +122,20 @@ public class CDCListener {
      */
     @PostConstruct
     private void start() {
-        this.executor.execute(engine);
+        this.executor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                try{
+                    engine.run();
+                }catch (Exception e){
+                    log.error("", e);
+                }
+                System.out.println("end");
+
+                }
+
+        });
     }
 
     /**
